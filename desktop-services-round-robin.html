@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desktop Services - T1 - Round Robin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        input, button {
+            font-size: 16px;
+            padding: 5px 10px;
+        }
+        #history {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Desktop Services - T1 - Round Robin</h1>
+    <div class="input-group">
+        <label for="ritmInput">RITM#:</label>
+        <input type="text" id="ritmInput" placeholder="Enter RITM number">
+        <button id="assignButton">Assign Next Tech</button>
+    </div>
+    <div id="output"></div>
+    <div id="history"></div>
+
+    <script>
+        const techNames = ['Mia', 'Mustafa', 'Jason', 'Nick'];
+        let currentTechIndex = 0;
+        const history = [];
+
+        document.getElementById('assignButton').addEventListener('click', assignNextTech);
+
+        function assignNextTech() {
+            const ritmNumber = document.getElementById('ritmInput').value.trim();
+            const techName = techNames[currentTechIndex];
+            
+            const assignment = {
+                ritm: ritmNumber,
+                tech: techName
+            };
+            
+            history.unshift(assignment);
+            updateOutput(assignment);
+            updateHistory();
+            
+            currentTechIndex = (currentTechIndex + 1) % techNames.length;
+            document.getElementById('ritmInput').value = '';
+        }
+
+        function updateOutput(assignment) {
+            const output = document.getElementById('output');
+            output.innerHTML = `<p>RITM# ${assignment.ritm} - ${assignment.tech}</p>`;
+        }
+
+        function updateHistory() {
+            const historyElement = document.getElementById('history');
+            historyElement.innerHTML = '<h2>Assignment History</h2>';
+            const list = document.createElement('ul');
+            history.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `RITM# ${item.ritm} - ${item.tech}`;
+                list.appendChild(listItem);
+            });
+            historyElement.appendChild(list);
+        }
+    </script>
+</body>
+</html>
